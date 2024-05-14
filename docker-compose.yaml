@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    container_name: db
+    volumes:
+      - ./sql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      # MYSQL_ROOT_PASSWORD: my-secret-pw
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+    networks:
+      - mynetwork
+
+  webapp:
+    container_name: next-app
+    build: ./chart-race
+    environment:
+      - API_ENDPOINT=http://localhost
+      - API_PORT=3000
+      - DB_HOST=db
+    restart: always
+    ports:
+      - 443:443
+    depends_on:
+      - api
+    networks:
+      - mynetwork
+
+  api:
+    container_name: express-app
+    build: ./express-app
+    environment:
+      - API_PORT=3000
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=my-secret-pw
+      # API_PORT: 3000
+      # DB_HOST: db # Use service name for DNS resolution
+      # DB_USER: root
+      # DB_PASSWORD: my-secret-pw
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin:latest
+  #   container_name: phpmyadmin
+  #   environment:
+  #     PMA_HOST: db
+  #     PMA_PORT: 3306
+  #     PMA_USER: root
+  #     PMA_PASSWORD: my-secret-pw
+  #   ports:
+  #     - 8080:80
+  #   depends_on:
+  #     - db
