@@ -23,6 +23,7 @@ export default function Home() {
         `${process.env.API_ENDPOINT}:${process.env.API_PORT}/get_population`,
       );
       // const response = await fetch("/api/get_population");
+
       const chartData = await response.json();
       setData(chartData.results);
     };
@@ -227,13 +228,10 @@ export default function Home() {
       <pre>
         {process.env.NODE_ENV}
         <br />
-        HOST : {process.env.DB_HOST}
+        HOST : {process.env.API_ENDPOINT}
         <br />
-        USER : {process.env.DB_USER}
+        USER : {process.env.API_PORT}
         <br />
-        PASS : {process.env.DB_PASSWORD}
-        {/* <br /> */}
-        {/* API : {process.env.API_ENDPOINT} */}
       </pre>
     </>
   );
