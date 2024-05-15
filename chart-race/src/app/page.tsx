@@ -15,17 +15,22 @@ export default function Home() {
   //
   useEffect(() => {
     const fetchData = async () => {
-      // const response = await fetch(
-      //   "https://demo-live-data.highcharts.com/population.json",
-      // );
+      try {
+        // const response = await fetch(
+        //   "https://demo-live-data.highcharts.com/population.json",
+        // );
 
-      const response = await fetch(
-        `${process.env.API_ENDPOINT}:${process.env.API_PORT}/get_population`,
-      );
-      // const response = await fetch("/api/get_population");
+        // const response = await fetch(
+        //   `${process.env.API_ENDPOINT}:${process.env.API_PORT}/get_population`,
+        // );
+        const response = await fetch("/api/get_population");
+        const chartData = await response.json();
 
-      const chartData = await response.json();
-      setData(chartData.results);
+        setData(chartData.results);
+        setPlayStatus(true);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchData();
   }, []);

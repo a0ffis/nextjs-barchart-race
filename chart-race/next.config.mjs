@@ -12,6 +12,14 @@ const nextConfig = {
     API_ENDPOINT: process.env.API_ENDPOINT,
     API_PORT: process.env.API_PORT,
   },
+  rewrites: async () => {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `http://${process.env.API_ENDPOINT}:${process.env.API_PORT}/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
